@@ -11,6 +11,8 @@
 		352678632A9505F70086CB7C /* TikTok_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 352678582A9505F70086CB7C /* TikTok_iOS_SDK.framework */; };
 		352678682A9505F70086CB7C /* TikTok_iOS_SDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 352678672A9505F70086CB7C /* TikTok_iOS_SDKTests.m */; };
 		352678692A9505F70086CB7C /* TikTok_iOS_SDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 3526785B2A9505F70086CB7C /* TikTok_iOS_SDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		352678742A95149E0086CB7C /* DJNetworkCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 352678722A95149E0086CB7C /* DJNetworkCore.h */; };
+		352678752A95149E0086CB7C /* DJNetworkCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 352678732A95149E0086CB7C /* DJNetworkCore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,8 @@
 		3526785C2A9505F70086CB7C /* TikTok_iOS_SDK.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = TikTok_iOS_SDK.docc; sourceTree = "<group>"; };
 		352678622A9505F70086CB7C /* TikTok_iOS_SDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TikTok_iOS_SDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		352678672A9505F70086CB7C /* TikTok_iOS_SDKTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TikTok_iOS_SDKTests.m; sourceTree = "<group>"; };
+		352678722A95149E0086CB7C /* DJNetworkCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJNetworkCore.h; sourceTree = "<group>"; };
+		352678732A95149E0086CB7C /* DJNetworkCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DJNetworkCore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +75,8 @@
 		3526785A2A9505F70086CB7C /* TikTok_iOS_SDK */ = {
 			isa = PBXGroup;
 			children = (
+				352678722A95149E0086CB7C /* DJNetworkCore.h */,
+				352678732A95149E0086CB7C /* DJNetworkCore.m */,
 				3526785B2A9505F70086CB7C /* TikTok_iOS_SDK.h */,
 				3526785C2A9505F70086CB7C /* TikTok_iOS_SDK.docc */,
 			);
@@ -92,6 +98,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				352678742A95149E0086CB7C /* DJNetworkCore.h in Headers */,
 				352678692A9505F70086CB7C /* TikTok_iOS_SDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3526785D2A9505F70086CB7C /* TikTok_iOS_SDK.docc in Sources */,
+				352678752A95149E0086CB7C /* DJNetworkCore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
