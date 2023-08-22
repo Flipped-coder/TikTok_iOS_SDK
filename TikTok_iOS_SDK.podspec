@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
 
 
   spec.name         = "TikTok_iOS_SDK"
-  spec.version      = "0.1.1"
+  spec.version      = "0.1.3"
   spec.summary      = "TikTok_iOS_SDK."
 
   # This description is used to generate tags and improve search results.
@@ -37,10 +37,9 @@ Pod::Spec.new do |spec|
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
-  spec.source_files  = 'TikTok_iOS_SDK/Classes/*.h'
-  #spec.exclude_files = "Classes/Exclude"
+  spec.source_files  = 'TikTok_iOS_SDK/Classes/*'
 
-  # spec.public_header_files = "TikTok_iOS_SDK/*.h"
+  spec.public_header_files = "TikTok_iOS_SDK/Classes/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -63,14 +62,10 @@ Pod::Spec.new do |spec|
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs
-  #  you can include multiple dependencies to ensure it works.
+  spec.frameworks = 'UIKit', 'MapKit'
 
-  # spec.requires_arc = true
+  spec.dependency 'AFNetworking', '~> 2.3'
+  spec.dependency 'CocoaAsyncSocket', '~> 7.6.2'
 
-  # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # spec.dependency "JSONKit", "~> 1.4"
 
 end

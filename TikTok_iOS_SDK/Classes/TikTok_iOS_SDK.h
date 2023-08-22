@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-- (void)test;
 
 //! Project version number for TikTok_iOS_SDK.
 FOUNDATION_EXPORT double TikTok_iOS_SDKVersionNumber;
