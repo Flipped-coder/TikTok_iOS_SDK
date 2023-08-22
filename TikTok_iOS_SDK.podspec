@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
 
 
   spec.name         = "TikTok_iOS_SDK"
-  spec.version      = "0.1.0"
+  spec.version      = "0.1.1"
   spec.summary      = "TikTok_iOS_SDK."
 
   # This description is used to generate tags and improve search results.
@@ -37,7 +37,7 @@ Pod::Spec.new do |spec|
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
-  spec.source_files  = "TikTok_iOS_SDK/*.{h,m}"
+  spec.source_files  = 'TikTok_iOS_SDK/Classes/*.h'
   #spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "TikTok_iOS_SDK/*.h"
@@ -58,16 +58,8 @@ Pod::Spec.new do |spec|
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Link your library with frameworks, or libraries. Libraries do not include
-  #  the lib prefix of their name.
-  #
+  
 
-  # spec.framework  = "SomeFramework"
-  # spec.frameworks = "SomeFramework", "AnotherFramework"
-
-  # spec.library   = "iconv"
-  # spec.libraries = "iconv", "xml2"
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
