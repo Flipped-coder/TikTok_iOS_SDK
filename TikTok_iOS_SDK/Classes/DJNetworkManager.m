@@ -19,7 +19,7 @@
     // 设置响应数据的类型，这里使用 JSON
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
-    NSString *accessToken = @"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";
+    NSString *accessToken = @"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";
     NSString *authorizationHeaderValue = [NSString stringWithFormat:@"Bearer %@", accessToken];
     NSDictionary *headers = @{@"Authorization": authorizationHeaderValue};
     
