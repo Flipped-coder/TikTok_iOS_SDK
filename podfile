@@ -1,0 +1,10 @@
+platform :ios, '11.0'
+
+target 'TikTok_iOS_SDK' do
+  use_frameworks!
+  
+  pod 'AFNetworking', '~> 4.0.0'
+  pod 'CocoaAsyncSocket', '~> 7.6.2'
+
+
+end
