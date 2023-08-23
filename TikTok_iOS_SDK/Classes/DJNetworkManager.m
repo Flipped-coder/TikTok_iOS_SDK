@@ -10,7 +10,7 @@
 
 @implementation DJNetworkManager
 
-- (void)test {
+- (void)getUserInfo {
     NSLog(@"This is iOS_SDK_test");
     
     // 创建 AFHTTPSessionManager 实例
@@ -19,10 +19,14 @@
     // 设置响应数据的类型，这里使用 JSON
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
+    NSString *accessToken = @"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";
+    NSString *authorizationHeaderValue = [NSString stringWithFormat:@"Bearer %@", accessToken];
+    NSDictionary *headers = @{@"Authorization": authorizationHeaderValue};
+    
     // 发起 GET 请求
-    [manager GET:@"https://jsonplaceholder.typicode.com/posts/1"
+    [manager GET:@"https://api.github.com/user"
       parameters:nil
-      headers:nil
+      headers:headers
       progress:nil
       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
           // 请求成功处理

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DJNetworkManager : NSObject
 
-- (void)test;
+- (void)getUserInfo;
 
 @end
 
