@@ -39,9 +39,9 @@
                 completionHandler:(DJCompletionHandler DJ_NULLABLE)handler; {
     
     switch((NSUInteger)pathway) {
-        case DJUserLogin_google:        [self authorizeWithGoogleWithURLSchemes:urlSchemes ViewController:viewController];
-        case DJUserLogin_facebook:      [self authorizeWithFacebookWithURLSchemes:urlSchemes ViewController:viewController];
-        case DJUserLogin_github:        [self authorizeWithGithubWithURLSchemes:urlSchemes ViewController:viewController];
+        case DJUserLogin_google:   [self authorizeWithGoogleWithURLSchemes:urlSchemes ViewController:viewController];break;
+        case DJUserLogin_facebook: [self authorizeWithFacebookWithURLSchemes:urlSchemes ViewController:viewController];break;
+        case DJUserLogin_github:   [self authorizeWithGithubWithURLSchemes:urlSchemes ViewController:viewController];break;
             
         default: NSLog(@"error\n");
     }
@@ -51,9 +51,9 @@
 + (void)loginWithURL:(NSURL *)url pathway:(DJLoginPathway *)pathway completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     
     switch((NSUInteger)pathway) {
-        case DJUserLogin_google:        [self parseGoogleAuthorizetionWithURL:url];
-        case DJUserLogin_facebook:      [self parseFacebookAuthorizetionWithURL:url];
-        case DJUserLogin_github:        [self parseGithubAuthorizetionWithURL:url];
+        case DJUserLogin_google:        [self parseGoogleAuthorizetionWithURL:url];break;
+        case DJUserLogin_facebook:      [self parseFacebookAuthorizetionWithURL:url];break;
+        case DJUserLogin_github:        [self parseGithubAuthorizetionWithURL:url];break;
             
         default: NSLog(@"error\n");
     }
@@ -191,23 +191,34 @@
 
 // Github 用户认证
 + (void)authorizeWithGithubWithURLSchemes:(NSString *)urlSchemes ViewController:(UIViewController *)viewController {
-    NSString *redirectURI = @"tiktok://callback";
     
-    NSString *urlString = [NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@", Github_API_AUTHORIZE ,Github_CLIENTID, redirectURI];
+    [[NSNotificationCenter defaultCenter] addObserver:viewController selector:@selector(backSafariView:) name:@"backSafariView" object:viewController];
+
+    NSString *clientID = @"c7efd3bd5e5dd6ed121e"; // 替换为你的 GitHub 应用的 Client ID
+    NSString *redirectURI = @"tiktok://callback";      // 替换为你的应用的 URL Scheme
+
+    NSString *urlString = [NSString stringWithFormat:@"https://github.com/login/oauth/authorize?client_id=%@&redirect_uri=%@", clientID, redirectURI];
     NSURL *url = [NSURL URLWithString:urlString];
-    
+
     // 创建自定义请求，并设置缓存策略为不使用缓存
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
 
     // 使用SFSafariViewController加载自定义请求
     SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:request.URL];
     safariViewController.modalPresentationStyle = UIModalPresentationPopover;
+    safariViewController.delegate = (id)viewController; // 设置代理
+    safariViewController.modalPresentationStyle = UIModalPresentationPopover;
     //    loginNC.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [viewController presentViewController:safariViewController animated:YES completion:nil];
 }
 
-
+- (void)backSafariView:(UIViewController*)viewController {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [viewController dismissViewControllerAnimated:YES completion:nil];
+    });
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"backSafariView" object:nil];
+}
 
 
 #pragma mark 第三方登录解析授权码
@@ -251,7 +262,7 @@
 // 换取 Github 令牌
 + (void)exchangeGithubToken:(NSString *)authorizetionCode {
     NSString *clientID = @"c7efd3bd5e5dd6ed121e";
-    NSString *clientSecret = @"9f204ff9863d9722a909ae394508b9e2708d4582";
+    NSString *clientSecret = @"06ef5e0109fd46432502f1929771bef1bf3b8e6a";
     
     // 构建请求 URL
     NSString *tokenURLString = @"https://github.com/login/oauth/access_token";
