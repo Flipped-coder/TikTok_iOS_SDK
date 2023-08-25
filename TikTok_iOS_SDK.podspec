@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
 
 
   spec.name         = "TikTok_iOS_SDK"
-  spec.version      = "0.1.6"
+  spec.version      = "0.1.7"
   spec.summary      = "TikTok_iOS_SDK."
 
   # This description is used to generate tags and improve search results.
@@ -37,9 +37,9 @@ Pod::Spec.new do |spec|
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
-  spec.source_files  = 'TikTok_iOS_SDK/Classes/*'
+  spec.source_files  = 'TikTok_iOS_SDK/**/*'
 
-  spec.public_header_files = "TikTok_iOS_SDK/Classes/*.h"
+  spec.public_header_files = "TikTok_iOS_SDK/include/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
