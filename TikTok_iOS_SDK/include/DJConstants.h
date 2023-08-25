@@ -12,6 +12,8 @@
 
 typedef void (^DJCompletionHandler)(id resultObject, NSError *error);
 
+typedef void (^DJAsyncDataHandler)(NSData *data, NSString *objectId, NSError *error);
+
 
 /*!
  * 平台类型
@@ -29,6 +31,26 @@ typedef NS_ENUM(NSInteger, DJPlatformType) {
   kJMSGPlatformTypeWeb        = 16,
 };
 
+
+/*!
+ * @abstract Generic 泛型
+ */
+#if __has_feature(objc_generics) || __has_extension(objc_generics)
+#  define DJ_GENERIC(...) <__VA_ARGS__>
+#else
+#  define DJ_GENERIC(...)
+#endif
+
+/*!
+ * @abstract nullable 用于定义某属性或者变量是否可允许为空
+ */
+#if __has_feature(nullability)
+#  define DJ_NONNULL __nonnull
+#  define DJ_NULLABLE __nullable
+#else
+#  define DJ_NONNULL
+#  define DJ_NULLABLE
+#endif
 
 
 
