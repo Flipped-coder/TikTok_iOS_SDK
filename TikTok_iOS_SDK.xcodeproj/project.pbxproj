@@ -45,6 +45,7 @@
 		3571A9762A98A16C0093AADB /* DJConversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJConversation.h; sourceTree = "<group>"; };
 		3571A9772A98A16C0093AADB /* DJConversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DJConversation.m; sourceTree = "<group>"; };
 		3571A97C2A98A6C20093AADB /* DJConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJConstants.h; sourceTree = "<group>"; };
+		3571A9812A98C5830093AADB /* DJConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJConfig.h; sourceTree = "<group>"; };
 		B781D012ADA0A631564445E0 /* Pods-TikTok_iOS_SDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_iOS_SDK.release.xcconfig"; path = "Target Support Files/Pods-TikTok_iOS_SDK/Pods-TikTok_iOS_SDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +125,7 @@
 				3571A9742A989FFC0093AADB /* DJTikTokDelegate.h */,
 				3571A9762A98A16C0093AADB /* DJConversation.h */,
 				3571A97C2A98A6C20093AADB /* DJConstants.h */,
+				3571A9812A98C5830093AADB /* DJConfig.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
