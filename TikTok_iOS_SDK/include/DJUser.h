@@ -82,11 +82,11 @@ typedef NS_ENUM(NSUInteger, DJUserGender) {
 /// 登录途径
 typedef NS_ENUM(NSUInteger, DJLoginPathway) {
   /// 第三方登录：Google
-  DJUserLogin_google    = 1,
+  DJGoogleLoginType    = 1,
   /// 第三方登录：Facebook
-  DJUserLogin_facebook  = 2,
+  DJFacebookLoginType  = 2,
   /// 第三方登录：Github
-  DJUserLogin_github    = 3,
+  DJGithubLoginType    = 3,
   /// 暂时未定义
   DJUserLogin_unkown1   = 4,
   /// 暂时未定义
@@ -243,14 +243,12 @@ typedef NS_ENUM(NSUInteger, DJLoginPathway) {
  * @abstract 用户认证(第三方登录)
  *
  * @param pathway                       登录方式：Google、Facebook、Github等第三方途径登录
- * @param urlSchemes                URLSchemes将作为认证结果回调的路径
  * @param viewController        当前所在的控制器，在当前的控制器上弹出登录授权界面
  * @param handler                       结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * @discussion 在项目 info 的 URL Types 添加一个项目，然后设置一个 URLSchemes，将该值作为参数传入方法
  */
 + (void)loginAuthorizeWithPathway:(DJLoginPathway *)pathway
-                       urlSchemes:(NSString *)urlSchemes
                    viewController:(UIViewController *)viewController
                 completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
 

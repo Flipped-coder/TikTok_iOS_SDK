@@ -6,7 +6,7 @@
 //
 
 #import "DJLoginConfig.h"
-#import <GoogleSignIn/GoogleSignIn.h>
+#import <GoogleSignIn.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @implementation DJLoginConfig

@@ -10,7 +10,6 @@
 
 #import "DJLoginConfig.h"
 #import "DJLogin.h"
-#import <GoogleSignIn/GoogleSignIn.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 
 #endif /* OAuthLogin_h */

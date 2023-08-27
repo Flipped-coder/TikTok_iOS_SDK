@@ -36,47 +36,38 @@
 
 
 + (void)loginAuthorizeWithPathway:(DJLoginPathway *)pathway
-                       urlSchemes:(NSString *)urlSchemes
                    viewController:(UIViewController *)viewController
                 completionHandler:(DJCompletionHandler DJ_NULLABLE)handler; {
-        
-    switch((NSUInteger)pathway) {
-        case DJUserLogin_google:
-            [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
-                if (!error) {
-                    NSString *tokenStr = token;
-                    
-                    
-                    
-                } else {
-                    NSLog(@"获取 Google 的 Token 失败：%@\n",error);
-                }
-            }];break;
-            
-            
-            
-        case DJUserLogin_facebook:
-            [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
-                if (!error) {
-                    NSString *tokenStr = token;
-                    
-                    
-                    
-                    
-                } else {
-                    NSLog(@"获取 Facebook 的 Token 失败：%@\n",error);
-                }
-
-            }];break;
-            
-            
-            
-            
-            
-        case DJUserLogin_github: break;
-            
-        default: NSLog(@"error\n");
+    
+    if ((NSUInteger)pathway == DJGoogleLoginType) {
+        [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    if(handler){
+                        handler(token, error);
+                    }
+                });
+            } else {
+                NSLog(@"获取 Google 的 Token 失败：%@\n",error);
+            }
+        }];
     }
+    
+    else if ((NSUInteger)pathway == DJFacebookLoginType) {
+        [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    if(handler){
+                        handler(token, error);
+                    }
+                });
+            } else {
+                NSLog(@"获取 Facebook 的 Token 失败：%@\n",error);
+            }
+        }];
+    }
+    
+    
 }
 
 // (暂时弃用)
