@@ -10,14 +10,16 @@
 		1FCAABD10D39429AC2DD742D /* Pods_TikTok_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32F7DF6CE10B1E56E3BB9F2B /* Pods_TikTok_iOS_SDK.framework */; };
 		352678632A9505F70086CB7C /* TikTok_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 352678582A9505F70086CB7C /* TikTok_iOS_SDK.framework */; };
 		352678682A9505F70086CB7C /* TikTok_iOS_SDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 352678672A9505F70086CB7C /* TikTok_iOS_SDKTests.m */; };
-		3571A9682A98967E0093AADB /* DJTikTok.h in Headers */ = {isa = PBXBuildFile; fileRef = 3571A9642A98967E0093AADB /* DJTikTok.h */; };
+		3571A9682A98967E0093AADB /* TikTok_iOS_SDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 3571A9642A98967E0093AADB /* TikTok_iOS_SDK.h */; };
 		3571A96B2A98967E0093AADB /* DJUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3571A9672A98967E0093AADB /* DJUser.h */; };
-		3571A96F2A98969B0093AADB /* DJTikTok.m in Sources */ = {isa = PBXBuildFile; fileRef = 3571A96C2A98969B0093AADB /* DJTikTok.m */; };
+		3571A96F2A98969B0093AADB /* TikTok_iOS_SDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 3571A96C2A98969B0093AADB /* TikTok_iOS_SDK.m */; };
 		3571A9712A98969B0093AADB /* DJUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3571A96E2A98969B0093AADB /* DJUser.m */; };
 		3571A9732A9898910093AADB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3571A9722A9898910093AADB /* Foundation.framework */; };
 		3571A9752A989FFC0093AADB /* DJTikTokDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3571A9742A989FFC0093AADB /* DJTikTokDelegate.h */; };
 		3571A9782A98A16C0093AADB /* DJConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3571A9762A98A16C0093AADB /* DJConversation.h */; };
 		3571A9792A98A16C0093AADB /* DJConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3571A9772A98A16C0093AADB /* DJConversation.m */; };
+		35B019312A9A45B400EBE695 /* DJNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 35B0192F2A9A45B400EBE695 /* DJNetwork.h */; };
+		35B019322A9A45B400EBE695 /* DJNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B019302A9A45B400EBE695 /* DJNetwork.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,9 +38,9 @@
 		352678582A9505F70086CB7C /* TikTok_iOS_SDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TikTok_iOS_SDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		352678622A9505F70086CB7C /* TikTok_iOS_SDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TikTok_iOS_SDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		352678672A9505F70086CB7C /* TikTok_iOS_SDKTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TikTok_iOS_SDKTests.m; sourceTree = "<group>"; };
-		3571A9642A98967E0093AADB /* DJTikTok.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJTikTok.h; sourceTree = "<group>"; };
+		3571A9642A98967E0093AADB /* TikTok_iOS_SDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TikTok_iOS_SDK.h; sourceTree = "<group>"; };
 		3571A9672A98967E0093AADB /* DJUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJUser.h; sourceTree = "<group>"; };
-		3571A96C2A98969B0093AADB /* DJTikTok.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DJTikTok.m; sourceTree = "<group>"; };
+		3571A96C2A98969B0093AADB /* TikTok_iOS_SDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TikTok_iOS_SDK.m; sourceTree = "<group>"; };
 		3571A96E2A98969B0093AADB /* DJUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DJUser.m; sourceTree = "<group>"; };
 		3571A9722A9898910093AADB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3571A9742A989FFC0093AADB /* DJTikTokDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJTikTokDelegate.h; sourceTree = "<group>"; };
@@ -46,6 +48,8 @@
 		3571A9772A98A16C0093AADB /* DJConversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DJConversation.m; sourceTree = "<group>"; };
 		3571A97C2A98A6C20093AADB /* DJConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJConstants.h; sourceTree = "<group>"; };
 		3571A9812A98C5830093AADB /* DJConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJConfig.h; sourceTree = "<group>"; };
+		35B0192F2A9A45B400EBE695 /* DJNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DJNetwork.h; sourceTree = "<group>"; };
+		35B019302A9A45B400EBE695 /* DJNetwork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DJNetwork.m; sourceTree = "<group>"; };
 		B781D012ADA0A631564445E0 /* Pods-TikTok_iOS_SDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_iOS_SDK.release.xcconfig"; path = "Target Support Files/Pods-TikTok_iOS_SDK/Pods-TikTok_iOS_SDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,9 +114,11 @@
 		352678BB2A952DFB0086CB7C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				3571A96C2A98969B0093AADB /* DJTikTok.m */,
+				3571A96C2A98969B0093AADB /* TikTok_iOS_SDK.m */,
 				3571A96E2A98969B0093AADB /* DJUser.m */,
 				3571A9772A98A16C0093AADB /* DJConversation.m */,
+				35B0192F2A9A45B400EBE695 /* DJNetwork.h */,
+				35B019302A9A45B400EBE695 /* DJNetwork.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -120,7 +126,7 @@
 		352678BC2A952E000086CB7C /* include */ = {
 			isa = PBXGroup;
 			children = (
-				3571A9642A98967E0093AADB /* DJTikTok.h */,
+				3571A9642A98967E0093AADB /* TikTok_iOS_SDK.h */,
 				3571A9672A98967E0093AADB /* DJUser.h */,
 				3571A9742A989FFC0093AADB /* DJTikTokDelegate.h */,
 				3571A9762A98A16C0093AADB /* DJConversation.h */,
@@ -155,8 +161,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3571A9682A98967E0093AADB /* DJTikTok.h in Headers */,
+				3571A9682A98967E0093AADB /* TikTok_iOS_SDK.h in Headers */,
 				3571A9782A98A16C0093AADB /* DJConversation.h in Headers */,
+				35B019312A9A45B400EBE695 /* DJNetwork.h in Headers */,
 				3571A96B2A98967E0093AADB /* DJUser.h in Headers */,
 				3571A9752A989FFC0093AADB /* DJTikTokDelegate.h in Headers */,
 			);
@@ -285,8 +292,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3571A96F2A98969B0093AADB /* DJTikTok.m in Sources */,
+				3571A96F2A98969B0093AADB /* TikTok_iOS_SDK.m in Sources */,
 				3571A9712A98969B0093AADB /* DJUser.m in Sources */,
+				35B019322A9A45B400EBE695 /* DJNetwork.m in Sources */,
 				3571A9792A98A16C0093AADB /* DJConversation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

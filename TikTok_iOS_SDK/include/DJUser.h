@@ -229,7 +229,7 @@ typedef NS_ENUM(NSUInteger, DJLoginPathway) {
  *
  * @param username   登录用户名. 规则与注册接口相同.
  * @param password   登录密码. 规则与注册接口相同.
- * @param handler     结果回调
+ * @param handler     结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * - resultObject 简单封装的user对象
  * - error 错误信息
@@ -245,9 +245,7 @@ typedef NS_ENUM(NSUInteger, DJLoginPathway) {
  * @param pathway                       登录方式：Google、Facebook、Github等第三方途径登录
  * @param urlSchemes                URLSchemes将作为认证结果回调的路径
  * @param viewController        当前所在的控制器，在当前的控制器上弹出登录授权界面
- * @param handler                       结果回调
- * - resultObject 简单封装的user对象
- * - error 错误信息
+ * @param handler                       结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * @discussion 在项目 info 的 URL Types 添加一个项目，然后设置一个 URLSchemes，将该值作为参数传入方法
  */
@@ -257,13 +255,14 @@ typedef NS_ENUM(NSUInteger, DJLoginPathway) {
                 completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
 
 
-/*!
+
+
+
+/*!// (暂时弃用)！！！
  * @abstract 认证授权之后得到URL，通过URL->得到授权码->得到令牌->服务器请求用户数据
  *
  * @param url               用户第三方登录后通过URL得到授权码
- * @param handler      结果回调
- * - resultObject 简单封装的user对象
- * - error 错误信息
+ * @param handler      结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * @discussion 该方法在 Appdelegate的- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options 中得到URL调用
  *

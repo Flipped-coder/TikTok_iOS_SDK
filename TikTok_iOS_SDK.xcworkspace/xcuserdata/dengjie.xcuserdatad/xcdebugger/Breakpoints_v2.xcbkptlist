@@ -62,8 +62,8 @@
             filePath = "TikTok_iOS_SDK/Classes/DJUser.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
             landmarkName = "+exchangeGithubToken:"
             landmarkType = "7">
          </BreakpointContent>

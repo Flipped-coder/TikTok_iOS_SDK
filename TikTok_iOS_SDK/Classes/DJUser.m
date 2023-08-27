@@ -7,6 +7,8 @@
 
 #import "DJUser.h"
 #import <SafariServices/SafariServices.h>
+#import <OAuthLogin/OAuthLogin.h>
+#import "DJNetwork.h"
 
 @implementation DJUser
 
@@ -37,26 +39,56 @@
                        urlSchemes:(NSString *)urlSchemes
                    viewController:(UIViewController *)viewController
                 completionHandler:(DJCompletionHandler DJ_NULLABLE)handler; {
-    
+        
     switch((NSUInteger)pathway) {
-        case DJUserLogin_google:   [self authorizeWithGoogleWithURLSchemes:urlSchemes ViewController:viewController];break;
-        case DJUserLogin_facebook: [self authorizeWithFacebookWithURLSchemes:urlSchemes ViewController:viewController];break;
-        case DJUserLogin_github:   [self authorizeWithGithubWithURLSchemes:urlSchemes ViewController:viewController];break;
+        case DJUserLogin_google:
+            [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+                if (!error) {
+                    NSString *tokenStr = token;
+                    
+                    
+                    
+                } else {
+                    NSLog(@"获取 Google 的 Token 失败：%@\n",error);
+                }
+            }];break;
+            
+            
+            
+        case DJUserLogin_facebook:
+            [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+                if (!error) {
+                    NSString *tokenStr = token;
+                    
+                    
+                    
+                    
+                } else {
+                    NSLog(@"获取 Facebook 的 Token 失败：%@\n",error);
+                }
+
+            }];break;
+            
+            
+            
+            
+            
+        case DJUserLogin_github: break;
             
         default: NSLog(@"error\n");
     }
 }
 
-
+// (暂时弃用)
 + (void)loginWithURL:(NSURL *)url pathway:(DJLoginPathway *)pathway completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     
-    switch((NSUInteger)pathway) {
-        case DJUserLogin_google:        [self parseGoogleAuthorizetionWithURL:url];break;
-        case DJUserLogin_facebook:      [self parseFacebookAuthorizetionWithURL:url];break;
-        case DJUserLogin_github:        [self parseGithubAuthorizetionWithURL:url];break;
-            
-        default: NSLog(@"error\n");
-    }
+//    switch((NSUInteger)pathway) {
+//        case DJUserLogin_google:        [self parseGoogleAuthorizetionWithURL:url];break;
+//        case DJUserLogin_facebook:      [self parseFacebookAuthorizetionWithURL:url];break;
+//        case DJUserLogin_github:        [self parseGithubAuthorizetionWithURL:url];break;
+//
+//        default: NSLog(@"error\n");
+//    }
 }
 
 
@@ -179,15 +211,26 @@
 
 
 
-#pragma mark 第三方登录用户认证
-// Google 用户认证
-+ (void)authorizeWithGoogleWithURLSchemes:(NSString *)urlSchemes ViewController:(UIViewController *)viewController {
-}
 
-// Facebook 用户认证
-+ (void)authorizeWithFacebookWithURLSchemes:(NSString *)urlSchemes ViewController:(UIViewController *)viewController {
-    
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark 第三方登录用户认证(暂时弃用)
 
 // Github 用户认证
 + (void)authorizeWithGithubWithURLSchemes:(NSString *)urlSchemes ViewController:(UIViewController *)viewController {
@@ -213,24 +256,7 @@
     [viewController presentViewController:safariViewController animated:YES completion:nil];
 }
 
-- (void)backSafariView:(UIViewController*)viewController {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [viewController dismissViewControllerAnimated:YES completion:nil];
-    });
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"backSafariView" object:nil];
-}
 
-
-#pragma mark 第三方登录解析授权码
-// 解析 Google 授权码
-+ (void)parseGoogleAuthorizetionWithURL:(NSURL *)url {
-    
-}
-
-// 解析 Facebook 授权码
-+ (void)parseFacebookAuthorizetionWithURL:(NSURL *)url {
-    
-}
 
 // 解析 Github 授权码
 + (void)parseGithubAuthorizetionWithURL:(NSURL *)url {
@@ -248,16 +274,7 @@
 }
 
 
-#pragma mark 第三方登录授权码换取令牌
-// 换取 Google 令牌
-+ (void)exchangeGoogleToken:(NSString *)authorizetionCode {
-    
-}
 
-// 换取 Facebook 令牌
-+ (void)exchangeFacebookToken:(NSString *)authorizetionCode {
-    
-}
 
 // 换取 Github 令牌
 + (void)exchangeGithubToken:(NSString *)authorizetionCode {
