@@ -44,9 +44,8 @@
 
 
 + (void)registerGoogleLoginWithClientID:(NSString *)clienID {
-    
-    GIDConfiguration *config = [[GIDConfiguration alloc] initWithClientID:clienID];
-    [[GIDSignIn sharedInstance] setConfiguration:config];
+
+    [DJLoginConfig registerGoogleLoginConfigWithClientID:clienID];
 }
 
 
@@ -55,7 +54,7 @@
 + (void)registerFacebookLoginWithApplication:(UIApplication *)application
                         launchingWithOptions:(NSDictionary *)launchOptions {
     
-    [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+    [DJLoginConfig registerFacebookLoginConfigWithApplication:application launchingWithOptions:launchOptions];
 }
 
 
