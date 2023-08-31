@@ -15,6 +15,29 @@ typedef void (^DJCompletionHandler)(id resultObject, NSError *error);
 typedef void (^DJAsyncDataHandler)(NSData *data, NSString *objectId, NSError *error);
 
 
+
+/*!
+ * 服务器配置信息
+ */
+#define SERVER_SCHEMES                            @"http://"
+#define SERVER_IP                                 @"localhost"
+#define SERVER_PORT                               @":8888"
+#define LOGIN_ROUTE_PHONE_VERIFYCODE              @"/v1/sso/phoneVerifyCodeLogin"
+#define LOGIN_ROUTE_PHONE_PASSWORD                @"/v1/sso/phonePassLogin"
+#define LOGIN_ROUTE_EMAIL_VERIFYCODE              @"/v1/sso/emailVerifyCodeLogin"
+#define LOGIN_ROUTE_EMAIL_PASSWORD                @"/v1/sso/phonePassLogin"
+#define LOGIN_ROUTE_TTKID_PASSWORD                @"/v1/sso/TTKIDPassLogin"
+#define LOGIN_ROUTE_GOOGLE                        @"/v1/sso/GoogleLogin"
+#define LOGIN_ROUTE_FACEBOOK                      @"/v1/sso/FacebookLogin"
+#define LOGIN_ROUTE_GITHUB                        @"/v1/sso/FacebookLogin"
+#define LOGIN_ROUTE_STANDBY_GOOGLE                @"/v1/sso/StandbyLogin"
+#define LOGIN_ROUTE_STANDBY_Facebook              @"/v1/sso/StandbyLogin"
+#define LOGIN_ROUTE_STANDBY_GITHUB                @"/v1/sso/StandbyLogin"
+
+
+
+
+
 /*!
  * 平台类型
  */

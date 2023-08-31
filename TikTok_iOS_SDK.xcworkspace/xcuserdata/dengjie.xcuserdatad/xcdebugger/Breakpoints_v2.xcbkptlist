@@ -55,16 +55,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C56D3B3E-2EC4-4E09-B22A-3F358B4E84C7"
+            uuid = "37699281-57CD-479C-88C0-8005B0AA7A17"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TikTok_iOS_SDK/Classes/DJUser.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
-            landmarkName = "+exchangeGithubToken:"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
+            landmarkName = "+getGoogleTTKUserInfoWithViewController:CompletionHandler:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5ABEB266-248B-4A16-AEC6-81355952B0E4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TikTok_iOS_SDK/Classes/DJUser.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "+loginThirdPartyWithLoginPathway:viewController:completionHandler:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

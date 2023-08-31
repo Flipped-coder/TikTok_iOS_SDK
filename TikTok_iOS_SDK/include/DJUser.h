@@ -78,27 +78,6 @@ typedef NS_ENUM(NSUInteger, DJUserGender) {
 
 
 
-#pragma mark - Login_type 声明
-/// 登录途径
-typedef NS_ENUM(NSUInteger, DJLoginPathway) {
-  /// 第三方登录：Google
-  DJGoogleLoginType    = 1,
-  /// 第三方登录：Facebook
-  DJFacebookLoginType  = 2,
-  /// 第三方登录：Github
-  DJGithubLoginType    = 3,
-  /// 暂时未定义
-  DJUserLogin_unkown1   = 4,
-  /// 暂时未定义
-  DJUserLogin_unkown2   = 5,
-  /// 暂时未定义
-  DJUserLogin_unkown3   = 6,
-  /// 暂时未定义
-  DJUserLogin_unkown4   = 7,
-};
-
-
-
 
 #pragma mark - DJUser_Class 用户管理类
 
@@ -227,49 +206,32 @@ typedef NS_ENUM(NSUInteger, DJLoginPathway) {
 /**
  * @abstract 用户登录(账号密码登录)
  *
- * @param username   登录用户名. 规则与注册接口相同.
- * @param password   登录密码. 规则与注册接口相同.
- * @param handler     结果回调，resultObject 类型为 DJUser， error 错误信息
+ * @param account                           登录账号（邮箱 ｜ 手机号｜ttk_id）
+ * @param code                                  确认码   （密码 ｜ 验证码）
+ * @param loginPathway                登录方式：手机密码｜手机验证码｜邮箱密码｜邮箱验证码｜ttkID密码 等方式
+ * @param handler                           结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * - resultObject 简单封装的user对象
  * - error 错误信息
  */
-+ (void)loginWithUsername:(NSString *)username
-                 password:(NSString *)password
-        completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
++ (void)loginWithAccount:(NSString *)account
+                    code:(NSString *)code
+            loginPathway:(DJLoginPathway)loginPathway
+       completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
 
 
 /*!
- * @abstract 用户认证(第三方登录)
+ * @abstract 第三方登录
  *
- * @param pathway                       登录方式：Google、Facebook、Github等第三方途径登录
- * @param viewController        当前所在的控制器，在当前的控制器上弹出登录授权界面
- * @param handler                       结果回调，resultObject 类型为 DJUser， error 错误信息
+ * @param loginPathway                       登录方式：Google、Facebook、Github等第三方途径登录
+ * @param viewController                  当前所在的控制器，在当前的控制器上弹出登录授权界面
+ * @param handler                                  结果回调，resultObject 类型为 DJUser， error 错误信息
  *
  * @discussion 在项目 info 的 URL Types 添加一个项目，然后设置一个 URLSchemes，将该值作为参数传入方法
  */
-+ (void)loginAuthorizeWithPathway:(DJLoginPathway *)pathway
-                   viewController:(UIViewController *)viewController
-                completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
-
-
-
-
-
-/*!// (暂时弃用)！！！
- * @abstract 认证授权之后得到URL，通过URL->得到授权码->得到令牌->服务器请求用户数据
- *
- * @param url               用户第三方登录后通过URL得到授权码
- * @param handler      结果回调，resultObject 类型为 DJUser， error 错误信息
- *
- * @discussion 该方法在 Appdelegate的- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options 中得到URL调用
- *
- * @discussion 该方法需要先通过 loginAuthorizeWithPathway 方法授权才能得到URL进行调用
- */
-+ (void)loginWithURL:(NSURL *)url
-             pathway:(DJLoginPathway *)pathway
-   completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
-
++ (void)loginThirdPartyWithLoginPathway:(DJLoginPathway)loginPathway
+                         viewController:(UIViewController *)viewController
+                      completionHandler:(DJCompletionHandler DJ_NULLABLE)handler;
 
 
 

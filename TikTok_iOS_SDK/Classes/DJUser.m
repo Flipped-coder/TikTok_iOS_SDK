@@ -8,7 +8,7 @@
 #import "DJUser.h"
 #import <SafariServices/SafariServices.h>
 #import <OAuthLogin/OAuthLogin.h>
-#import "DJNetwork.h"
+#import <DJNetworking/DJUserNetworking.h>
 
 @implementation DJUser
 
@@ -27,7 +27,11 @@
 
 
 
-+ (void)loginWithUsername:(NSString *)username password:(NSString *)password completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
++ (void)loginWithAccount:(NSString *)account
+                    code:(NSString *)code
+            loginPathway:(DJLoginPathway)loginPathway
+       completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    
     
     
 }
@@ -35,52 +39,26 @@
 
 
 
-+ (void)loginAuthorizeWithPathway:(DJLoginPathway *)pathway
-                   viewController:(UIViewController *)viewController
-                completionHandler:(DJCompletionHandler DJ_NULLABLE)handler; {
++ (void)loginThirdPartyWithLoginPathway:(DJLoginPathway)loginPathway
+                         viewController:(UIViewController *)viewController
+                      completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     
-    if ((NSUInteger)pathway == DJGoogleLoginType) {
-        [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
-            if (!error) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    if(handler){
-                        handler(token, error);
-                    }
-                });
-            } else {
-                NSLog(@"获取 Google 的 Token 失败：%@\n",error);
-            }
+    if (loginPathway == DJGoogleLoginType) {
+        [DJUser getGoogleTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+            NSLog(@"");
         }];
+    } else if (loginPathway == DJGoogleStandbyLoginType) {
+        
+        [DJUser getGoogleStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+            NSLog(@"");
+        }];
+        
     }
     
-    else if ((NSUInteger)pathway == DJFacebookLoginType) {
-        [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
-            if (!error) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    if(handler){
-                        handler(token, error);
-                    }
-                });
-            } else {
-                NSLog(@"获取 Facebook 的 Token 失败：%@\n",error);
-            }
-        }];
-    }
-    
-    
+
 }
 
-// (暂时弃用)
-+ (void)loginWithURL:(NSURL *)url pathway:(DJLoginPathway *)pathway completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
-    
-//    switch((NSUInteger)pathway) {
-//        case DJUserLogin_google:        [self parseGoogleAuthorizetionWithURL:url];break;
-//        case DJUserLogin_facebook:      [self parseFacebookAuthorizetionWithURL:url];break;
-//        case DJUserLogin_github:        [self parseGithubAuthorizetionWithURL:url];break;
-//
-//        default: NSLog(@"error\n");
-//    }
-}
+
 
 
 
@@ -210,120 +188,156 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-#pragma mark 第三方登录用户认证(暂时弃用)
-
-// Github 用户认证
-+ (void)authorizeWithGithubWithURLSchemes:(NSString *)urlSchemes ViewController:(UIViewController *)viewController {
-    
-    [[NSNotificationCenter defaultCenter] addObserver:viewController selector:@selector(backSafariView:) name:@"backSafariView" object:viewController];
-
-    NSString *clientID = @"c7efd3bd5e5dd6ed121e"; // 替换为你的 GitHub 应用的 Client ID
-    NSString *redirectURI = @"tiktok://callback";      // 替换为你的应用的 URL Scheme
-
-    NSString *urlString = [NSString stringWithFormat:@"https://github.com/login/oauth/authorize?client_id=%@&redirect_uri=%@", clientID, redirectURI];
-    NSURL *url = [NSURL URLWithString:urlString];
-
-    // 创建自定义请求，并设置缓存策略为不使用缓存
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
-
-    // 使用SFSafariViewController加载自定义请求
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:request.URL];
-    safariViewController.modalPresentationStyle = UIModalPresentationPopover;
-    safariViewController.delegate = (id)viewController; // 设置代理
-    safariViewController.modalPresentationStyle = UIModalPresentationPopover;
-    //    loginNC.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [viewController presentViewController:safariViewController animated:YES completion:nil];
-}
-
-
-
-// 解析 Github 授权码
-+ (void)parseGithubAuthorizetionWithURL:(NSURL *)url {
-    NSString *query = [url query];
-    NSArray *queryComponents = [query componentsSeparatedByString:@"&"];
-    for (NSString *component in queryComponents) {
-        NSArray *pairComponents = [component componentsSeparatedByString:@"="];
-        NSString *key = [pairComponents firstObject];
-        NSString *value = [pairComponents lastObject];
-        if ([key isEqualToString:@"code"]) {
-            NSLog(@"授权码：%@", value);
-            [self exchangeGithubToken:value];
-        }
-    }
-}
-
-
-
-
-// 换取 Github 令牌
-+ (void)exchangeGithubToken:(NSString *)authorizetionCode {
-    NSString *clientID = @"c7efd3bd5e5dd6ed121e";
-    NSString *clientSecret = @"06ef5e0109fd46432502f1929771bef1bf3b8e6a";
-    
-    // 构建请求 URL
-    NSString *tokenURLString = @"https://github.com/login/oauth/access_token";
-    NSURL *tokenURL = [NSURL URLWithString:tokenURLString];
-    
-    // 构建请求参数
-    NSDictionary *params = @{
-        @"client_id": clientID,
-        @"client_secret": clientSecret,
-        @"code": authorizetionCode
-    };
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:tokenURL];
-    request.HTTPMethod = @"POST";
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    
-    // 构建请求体
-    NSMutableString *body = [NSMutableString string];
-    for (NSString *key in params) {
-        NSString *encodedKey = [key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        NSString *encodedValue = [params[key] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        [body appendFormat:@"%@=%@&", encodedKey, encodedValue];
-    }
-    request.HTTPBody = [body dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // 发起请求
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-            NSLog(@"获取访问令牌失败：%@", error);
-            return;
-        }
-        
-        NSError *jsonError;
-        NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-        if (jsonError) {
-            NSLog(@"解析响应失败：%@", jsonError);
-            return;
-        }
-        
-        NSString *accessToken = responseDict[@"access_token"];
-        if (accessToken) {
-            NSLog(@"访问令牌：%@", accessToken);
-
-            // 在这里可以使用访问令牌进行 GitHub API 请求
-            // ...
++ (void)getGoogleTTKUserInfoWithViewController:(UIViewController *)viewController
+                             CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 得到HTTP请求信息
+    [DJUser getGoogleLoginRequserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+        if (!error) {
+            DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
+            // 获得服务器返回的响应：TTK UserInfo
+            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
+                if (!error) {
+                    
+                    
+                    // resultObject为服务器返回的ttkUserInfo
+                    id userInfo = resultObject;
+                    
+                    
+                    handler(userInfo, nil);
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        if(handler){
+                            handler(nil, error);
+                        }
+                    });
+                }
+            }];
         } else {
-            NSLog(@"获取访问令牌失败");
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
         }
     }];
-    [task resume];
 }
+
+
+// 获取 Google 登录的HTTP请求信息
++ (void)getGoogleLoginRequserInfoWithViewController:(UIViewController *)viewController
+                                  CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 获取客户端信息
+    DJClientInfo *clientInfo = [DJClientInfo initClientInfo];
+    // 获取服务器信息
+    DJServerInfo *serverInfo = [DJServerInfo initServerInfoWithURLSchems:SERVER_SCHEMES serverIp:SERVER_IP erverPort:SERVER_PORT serverRoute:LOGIN_ROUTE_GOOGLE];
+    
+    // 获取 google发放的token
+    [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+        if (!error) {
+            // 获取请求体信息
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:token thirdPartyUserInfo:nil clientInfo:clientInfo];
+            // 获取HTTP请求信息
+            DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    // 返回HTTP请求信息
+                    handler(requestInfo, nil);
+                }
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
+        }
+    }];
+}
+
+
+
+
+
+
++ (void)getGoogleStandbyTTKUserInfoWithViewController:(UIViewController *)viewController
+                             CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 得到HTTP请求信息
+    [DJUser getGoogleStandbyLoginRequsetInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+        if (!error) {
+            DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
+            // 获得服务器返回的响应：TTK UserInfo
+            [DJUserManageNetworking thirdPartyGoogleLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
+                if (!error) {
+                    
+                    
+                    // resultObject为服务器返回的ttkUserInfo
+                    id userInfo = resultObject;
+                    
+                    
+                    handler(userInfo, nil);
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        if(handler){
+                            handler(nil, error);
+                        }
+                    });
+                }
+            }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
+        }
+    }];
+}
+
+// 获取备用方法 Google 登录的HTTP请求信息
++ (void)getGoogleStandbyLoginRequsetInfoWithViewController:(UIViewController *)viewController
+                                         CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 获取客户端信息
+    DJClientInfo *clientInfo = [DJClientInfo initClientInfo];
+    // 获取服务器信息
+    DJServerInfo *serverInfo = [DJServerInfo initServerInfoWithURLSchems:SERVER_SCHEMES serverIp:SERVER_IP erverPort:SERVER_PORT serverRoute:LOGIN_ROUTE_STANDBY_GOOGLE];
+    
+    
+    // 获取 google发放的token
+    [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+        if (!error) {
+            
+            // 获取第三方平台UserInfo
+            DJStandbyUserInfo *standbyInfo = [DJStandbyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
+            // 获取请求体信息
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:standbyInfo clientInfo:clientInfo];
+            // 获取HTTP请求信息
+            DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    // 返回HTTP请求信息
+                    handler(requestInfo, nil);
+                }
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
+        }
+    }];
+    
+    
+    
+    
+}
+
+
+
+
+
 
 
 
