@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
 
 
   spec.name         = "TikTok_iOS_SDK"
-  spec.version      = "0.2.5"
+  spec.version      = "0.2.6"
   spec.summary      = "TikTok_iOS_SDK."
 
   # This description is used to generate tags and improve search results.
@@ -64,7 +64,7 @@ Pod::Spec.new do |spec|
   spec.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }   # 解决x86库和arm64编译架构冲突
 
   spec.dependency 'OAuthLogin', '~> 0.2.0'
-  spec.dependency 'DJNetworking', '~> 0.2.0'
+  spec.dependency 'DJNetworking', '~> 0.2.2'
 
 
 end

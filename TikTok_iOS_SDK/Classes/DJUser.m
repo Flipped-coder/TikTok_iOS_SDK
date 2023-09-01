@@ -12,6 +12,28 @@
 
 @implementation DJUser
 
+static DJUser* _instance = nil;
++ (instancetype)shareInstance {
+    static dispatch_once_t onceToken ;
+    dispatch_once(&onceToken, ^{
+        _instance = [[super allocWithZone:NULL] init] ;
+    });
+    return _instance ;
+    }
+ 
+ //用alloc返回也是唯一实例
++ (DJUser *) allocWithZone:(struct _NSZone *)zone {
+    return [DJUser shareInstance] ;
+}
+//对对象使用copy也是返回唯一实例
+- (DJUser *)copyWithZone:(NSZone *)zone {
+    return [DJUser shareInstance] ;//return _instance;
+}
+ //对对象使用mutablecopy也是返回唯一实例
+- (DJUser *)mutableCopyWithZone:(NSZone *)zone {
+    return [DJUser shareInstance] ;
+}
+
 
 #pragma mark - User登录注册方法
 
@@ -43,50 +65,21 @@
                          viewController:(UIViewController *)viewController
                       completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     
-    if (loginPathway == DJGoogleLoginType) {
-        [DJUser getGoogleTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
-            NSLog(@"");
-            dispatch_async(dispatch_get_main_queue(),^{
-                if(handler){
-                    handler(resultObject, error);
-                }
-            });
-        }];
-    }
-    
-    
-    else if (loginPathway == DJGoogleStandbyLoginType) {
-        [DJUser getGoogleStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
-            NSLog(@"");
-            dispatch_async(dispatch_get_main_queue(),^{
-                if(handler){
-                    handler(resultObject, error);
-                }
-            });
-        }];
-    }
-    
-    
-    else if (loginPathway == DJFacebookLoginType) {
-        
-    }
-    
-    
-    else if (loginPathway == DJFacebookStandbyLoginType) {
-        [DJUser getFacebookStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
-            NSLog(@"");
-            dispatch_async(dispatch_get_main_queue(),^{
-                if(handler){
-                    handler(resultObject, error);
-                }
-            });
-        }];
-        
+    switch (loginPathway) {
+        case DJGoogleStandbyLoginType: {
+            [DJUser getGoogleStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+                handler([DJUser initUserInfo:resultObject], error);
+            }];
+        }   break;
+            
+        case DJFacebookStandbyLoginType: {
+            [DJUser getFacebookStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+                handler([DJUser initUserInfo:resultObject], error);
+            }];
+        }   break;
+        default:break;
     }
 }
-
-
-
 
 
 + (void)logout:(DJCompletionHandler DJ_NULLABLE)handler {
@@ -100,7 +93,9 @@
 
 
 + (DJUser *)myInfo {
-    return nil;
+    DJUser *userInfo = [DJUser shareInstance];
+    
+    return userInfo;
 }
 
 
@@ -210,6 +205,29 @@
 
 
 
+#pragma mark - 用户信息处理
+// 初始化用户信息
++ (DJUser *)initUserInfo:(NSDictionary *)resultObject {
+    
+    DJUser *userInfo = [DJUser shareInstance];
+    [userInfo setValue:[resultObject objectForKey:@"uid"] forKey:@"id"];
+    [userInfo setValue:[resultObject objectForKey:@"ttk_id"] forKey:@"username"];
+    [userInfo setValue:[resultObject objectForKey:@"nick_name"] forKey:@"nickname"];
+    [userInfo setValue:[resultObject objectForKey:@"gender"] forKey:@"gender"];
+    [userInfo setValue:[resultObject objectForKey:@"birthdate"] forKey:@"birthday"];
+    [userInfo setValue:[resultObject objectForKey:@"avatar_path"] forKey:@"avatar"];
+//    [userInfo setValue:[resultObject objectForKey:@"bio"] forKey:@"uid"];
+    [userInfo setValue:[resultObject objectForKey:@"country"] forKey:@"region"];
+    [userInfo setValue:[resultObject objectForKey:@"city"] forKey:@"address"];
+    [userInfo setValue:[resultObject objectForKey:@"email"] forKey:@"email"];
+    [userInfo setValue:[resultObject objectForKey:@"phone"] forKey:@"phoneNumber"];
+    //[userInfo setValue:[resultObject objectForKey:@"account_status"] forKey:@"uid"];
+
+    return userInfo;
+}
+
+
+
 
 
 
@@ -288,30 +306,13 @@
 #pragma mark - google备用方法登录逻辑
 // 备用方法google登录获取 ttkUserInfo
 + (void)getGoogleStandbyTTKUserInfoWithViewController:(UIViewController *)viewController
-                             CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+                                    CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     // 得到HTTP请求信息
     [DJUser getGoogleStandbyLoginRequsetInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
         if (!error) {
             DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
             // 获得服务器返回的响应：TTK UserInfo
-            [DJUserManageNetworking thirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
-                if (!error) {
-                    
-                    
-                    // resultObject为服务器返回的ttkUserInfo
-                    id userInfo = resultObject;
-                    
-                    
-                    handler(userInfo, nil);
-                    
-                } else {
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        if(handler){
-                            handler(nil, error);
-                        }
-                    });
-                }
-            }];
+            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:handler];
         } else {
             dispatch_async(dispatch_get_main_queue(),^{
                 if(handler){
@@ -368,24 +369,7 @@
         if (!error) {
             DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
             // 获得服务器返回的响应：TTK UserInfo
-            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
-                if (!error) {
-                    
-                    
-                    // resultObject为服务器返回的ttkUserInfo
-                    id userInfo = resultObject;
-                    
-                    
-                    handler(userInfo, nil);
-                    
-                } else {
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        if(handler){
-                            handler(nil, error);
-                        }
-                    });
-                }
-            }];
+            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:handler];
         } else {
             dispatch_async(dispatch_get_main_queue(),^{
                 if(handler){
@@ -439,10 +423,5 @@
 
 
 
-
-- (nonnull id)copyWithZone:(nullable NSZone *)zone {
-    
-    return nil;
-}
 
 @end

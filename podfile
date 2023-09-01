@@ -6,7 +6,7 @@ target 'TikTok_iOS_SDK' do
   use_frameworks!
   
   pod 'OAuthLogin', '~> 0.2.0'
-  pod 'DJNetworking', '~> 0.2.1'
+  pod 'DJNetworking', '~> 0.2.2'
 
 
 end

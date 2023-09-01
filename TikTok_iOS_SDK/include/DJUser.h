@@ -45,9 +45,9 @@ typedef NS_ENUM(NSUInteger, DJUserGender) {
   /// 用户性别类型: 未知
   DJUserGenderUnknown = 0,
   /// 用户性别类型: 男
-  DJUserGenderMale,
+  DJUserGenderMale = 1,
   /// 用户性别类型: 女
-  DJUserGenderFemale,
+  DJUserGenderFemale = 2,
 };
 
 
@@ -103,6 +103,16 @@ typedef NS_ENUM(NSUInteger, DJUserGender) {
  * @discussion 这是用户帐号，注册后不可变更。App 级别唯一。这是所有用户相关 API 的用户标识。
  */
 @property(nonatomic, copy, readonly) NSString *username;
+
+/*!
+ * @abstract 邮箱
+ */
+@property(nonatomic, copy, readonly) NSString * DJ_NULLABLE email;
+
+/*!
+ * @abstract 手机号
+ */
+@property(nonatomic, copy, readonly) NSString * DJ_NULLABLE phoneNumber;
 
 /*!
  * @abstract 用户昵称
