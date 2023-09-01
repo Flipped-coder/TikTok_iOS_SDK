@@ -265,8 +265,8 @@
 
 
 /// 第三方登录
-+ (void)thirdPartyGoogleLoginWithRequestInfo:(DJRequestInfo *)requestInfo
-                           completionHandler:(DJNetworkingHandler)handler {
++ (void)thirdPartyLoginWithRequestInfo:(DJRequestInfo *)requestInfo
+                     completionHandler:(DJNetworkingHandler)handler {
     
     NSDictionary *clientInfo = @{
         @"device_info"   : requestInfo.parameters.clientInfo.device_info,
@@ -338,7 +338,7 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
     // 发起 GET 请求
-    [manager GET:url
+    [manager POST:url
       parameters:parameters
          headers:nil
         progress:nil

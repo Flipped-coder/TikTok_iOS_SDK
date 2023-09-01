@@ -46,16 +46,43 @@
     if (loginPathway == DJGoogleLoginType) {
         [DJUser getGoogleTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
             NSLog(@"");
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(resultObject, error);
+                }
+            });
         }];
-    } else if (loginPathway == DJGoogleStandbyLoginType) {
-        
+    }
+    
+    
+    else if (loginPathway == DJGoogleStandbyLoginType) {
         [DJUser getGoogleStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
             NSLog(@"");
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(resultObject, error);
+                }
+            });
         }];
+    }
+    
+    
+    else if (loginPathway == DJFacebookLoginType) {
         
     }
     
-
+    
+    else if (loginPathway == DJFacebookStandbyLoginType) {
+        [DJUser getFacebookStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+            NSLog(@"");
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(resultObject, error);
+                }
+            });
+        }];
+        
+    }
 }
 
 
@@ -186,8 +213,8 @@
 
 
 
-
-
+#pragma mark - google登录逻辑
+// google登录获取 ttkUserInfo
 + (void)getGoogleTTKUserInfoWithViewController:(UIViewController *)viewController
                              CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     // 得到HTTP请求信息
@@ -222,7 +249,6 @@
         }
     }];
 }
-
 
 // 获取 Google 登录的HTTP请求信息
 + (void)getGoogleLoginRequserInfoWithViewController:(UIViewController *)viewController
@@ -259,7 +285,8 @@
 
 
 
-
+#pragma mark - google备用方法登录逻辑
+// 备用方法google登录获取 ttkUserInfo
 + (void)getGoogleStandbyTTKUserInfoWithViewController:(UIViewController *)viewController
                              CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
     // 得到HTTP请求信息
@@ -267,7 +294,7 @@
         if (!error) {
             DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
             // 获得服务器返回的响应：TTK UserInfo
-            [DJUserManageNetworking thirdPartyGoogleLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
+            [DJUserManageNetworking thirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
                 if (!error) {
                     
                     
@@ -294,6 +321,7 @@
         }
     }];
 }
+
 
 // 获取备用方法 Google 登录的HTTP请求信息
 + (void)getGoogleStandbyLoginRequsetInfoWithViewController:(UIViewController *)viewController
@@ -328,13 +356,81 @@
             });
         }
     }];
-    
-    
-    
-    
 }
 
 
+#pragma mark - Facebook备用方法登录逻辑
+// 备用方法Facebook登录获取 ttkUserInfo
++ (void)getFacebookStandbyTTKUserInfoWithViewController:(UIViewController *)viewController
+                                      CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 得到HTTP请求信息
+    [DJUser getFacebookStandbyLoginRequsetInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
+        if (!error) {
+            DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
+            // 获得服务器返回的响应：TTK UserInfo
+            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
+                if (!error) {
+                    
+                    
+                    // resultObject为服务器返回的ttkUserInfo
+                    id userInfo = resultObject;
+                    
+                    
+                    handler(userInfo, nil);
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        if(handler){
+                            handler(nil, error);
+                        }
+                    });
+                }
+            }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
+        }
+    }];
+}
+
+
+// 获取备用方法 Facebook 登录的HTTP请求信息
++ (void)getFacebookStandbyLoginRequsetInfoWithViewController:(UIViewController *)viewController
+                                           CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    // 获取客户端信息
+    DJClientInfo *clientInfo = [DJClientInfo initClientInfo];
+    // 获取服务器信息
+    DJServerInfo *serverInfo = [DJServerInfo initServerInfoWithURLSchems:SERVER_SCHEMES serverIp:SERVER_IP erverPort:SERVER_PORT serverRoute:LOGIN_ROUTE_STANDBY_Facebook];
+    
+    
+    // 获取 Facebook 发放的token
+    [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+        if (!error) {
+            
+            // 获取第三方平台UserInfo
+            DJStandbyUserInfo *standbyInfo = [DJStandbyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
+            // 获取请求体信息
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:standbyInfo clientInfo:clientInfo];
+            // 获取HTTP请求信息
+            DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    // 返回HTTP请求信息
+                    handler(requestInfo, nil);
+                }
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(),^{
+                if(handler){
+                    handler(nil, error);
+                }
+            });
+        }
+    }];
+}
 
 
 
