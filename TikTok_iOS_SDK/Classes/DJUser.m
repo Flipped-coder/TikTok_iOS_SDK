@@ -9,30 +9,31 @@
 #import <SafariServices/SafariServices.h>
 #import <OAuthLogin/OAuthLogin.h>
 #import <DJNetworking/DJUserNetworking.h>
+#import <TikTok_iOS_SDK.h>
 
 @implementation DJUser
 
-static DJUser* _instance = nil;
-+ (instancetype)shareInstance {
-    static dispatch_once_t onceToken ;
-    dispatch_once(&onceToken, ^{
-        _instance = [[super allocWithZone:NULL] init] ;
-    });
-    return _instance ;
-    }
- 
- //用alloc返回也是唯一实例
-+ (DJUser *) allocWithZone:(struct _NSZone *)zone {
-    return [DJUser shareInstance] ;
-}
-//对对象使用copy也是返回唯一实例
-- (DJUser *)copyWithZone:(NSZone *)zone {
-    return [DJUser shareInstance] ;//return _instance;
-}
- //对对象使用mutablecopy也是返回唯一实例
-- (DJUser *)mutableCopyWithZone:(NSZone *)zone {
-    return [DJUser shareInstance] ;
-}
+//static DJUser* _instance = nil;
+//+ (instancetype)shareInstance {
+//    static dispatch_once_t onceToken ;
+//    dispatch_once(&onceToken, ^{
+//        _instance = [[super allocWithZone:NULL] init] ;
+//    });
+//    return _instance ;
+//    }
+//
+// //用alloc返回也是唯一实例
+//+ (DJUser *) allocWithZone:(struct _NSZone *)zone {
+//    return [DJUser shareInstance] ;
+//}
+////对对象使用copy也是返回唯一实例
+//- (DJUser *)copyWithZone:(NSZone *)zone {
+//    return [DJUser shareInstance] ;//return _instance;
+//}
+// //对对象使用mutablecopy也是返回唯一实例
+//- (DJUser *)mutableCopyWithZone:(NSZone *)zone {
+//    return [DJUser shareInstance] ;
+//}
 
 
 #pragma mark - User登录注册方法
@@ -48,15 +49,47 @@ static DJUser* _instance = nil;
 
 
 
-
-+ (void)loginWithAccount:(NSString *)account
-                    code:(NSString *)code
++ (void)loginWithAccount:(NSString * DJ_NULLABLE)account
+                    code:(NSString * DJ_NULLABLE)code
+         thirdPartyToken:(NSString * DJ_NULLABLE)token
+      thirdPartyUserInfo:(DJThirdPartyUserInfo * DJ_NULLABLE)thirdPartyUserInfo
             loginPathway:(DJLoginPathway)loginPathway
        completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    
+    switch (loginPathway) {
+        case DJGoogleStandbyLoginType: {
+            // 获取客户端信息
+            DJClientInfo *clientInfo = [DJClientInfo initClientInfo];
+            // 获取服务器信息
+            DJServerInfo *serverInfo = [DJServerInfo initServerInfoWithURLSchems:SERVER_SCHEMES serverIp:SERVER_IP erverPort:SERVER_PORT serverRoute:LOGIN_ROUTE_STANDBY_GOOGLE];
+            // 获取请求体信息
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:thirdPartyUserInfo clientInfo:clientInfo];
+            // HTTP 请求信息
+            DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
+            //
+            [DJUserManageNetworking standbyThirdPartyLoginWithRequestInfo:requestInfo completionHandler:^(id  _Nullable resultObject, NSError * _Nullable error) {
+                handler(resultObject, error);
+            }];
+
+            
+        } break;
+            
+        case DJFacebookStandbyLoginType: {
+            
+        }break;
+            
+            
+        default:break;
+    }
+    
     
     
     
 }
+
+
+
+
 
 
 
@@ -68,18 +101,79 @@ static DJUser* _instance = nil;
     switch (loginPathway) {
         case DJGoogleStandbyLoginType: {
             [DJUser getGoogleStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
-                handler([DJUser initUserInfo:resultObject], error);
+                
+                DJTikTok *tiktok = [DJTikTok shareInstance];
+                [tiktok setUserToken:[resultObject objectForKey:@"token"]];
+                
+                [DJUser getMyUserInfo];
+                
+                
+                NSLog(@"");
+                
+                handler(nil, error);
             }];
         }   break;
             
         case DJFacebookStandbyLoginType: {
             [DJUser getFacebookStandbyTTKUserInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
-                handler([DJUser initUserInfo:resultObject], error);
-            }];
+                DJTikTok *tiktok = [DJTikTok shareInstance];
+                [tiktok setUserToken:[resultObject objectForKey:@"token"]];
+                
+                [DJUser getMyUserInfo];
+                
+                
+                NSLog(@"");
+                
+                handler(nil, error);            }];
         }   break;
         default:break;
     }
 }
+
+
+
++ (void)getThirdPartyTokenWithLoginPathway:(DJLoginPathway)loginPathway
+                            viewController:(UIViewController *)viewController
+                         completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+    switch (loginPathway) {
+        case DJGoogleLoginType: {
+            [DJLogin googleLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+                handler(token, error);
+            }];
+        } break;
+        
+        case DJFacebookLoginType : {
+            [DJLogin facebookLoginWithViewController:viewController handler:^(NSString * _Nullable token, NSError * _Nullable error) {
+                handler(token, error);
+            }];
+        }
+        default: break;
+    }
+}
+
+
+
++ (void)getThirePartyUserInfoWithToken:(NSString *)token
+                          loginPathway:(DJLoginPathway)loginPathway
+                     completionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
+
+    switch (loginPathway) {
+        case DJGoogleLoginType: {
+            DJThirdPartyUserInfo *thirdUserInfo = [DJThirdPartyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
+            handler(thirdUserInfo, nil);
+        } break;
+        
+        case DJFacebookLoginType : {
+            DJThirdPartyUserInfo *thirdUserInfo = [DJThirdPartyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJFacebookStandbyLoginType];
+            handler(thirdUserInfo, nil);
+        }
+        default: break;
+    }
+    
+    
+}
+
+
 
 
 + (void)logout:(DJCompletionHandler DJ_NULLABLE)handler {
@@ -91,13 +185,44 @@ static DJUser* _instance = nil;
 
 #pragma mark - Get方法（获取User信息）
 
-
 + (DJUser *)myInfo {
-    DJUser *userInfo = [DJUser shareInstance];
-    
+    DJUser *userInfo = [DJTikTok shareInstance].myUserInfo;
     return userInfo;
 }
 
+
++ (void)getMyUserInfo {
+    DJTikTok *tiktok = [DJTikTok shareInstance];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    if(!tiktok.userToken)
+        return;
+
+    // 创建会话配置
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    // 添加请求头
+    [sessionConfig setHTTPAdditionalHeaders:@{@"Authorization": tiktok.userToken}];
+    // 创建NSURLSession实例
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    
+    DJServerInfo *serverInfo = [DJServerInfo initServerInfoWithURLSchems:SERVER_SCHEMES serverIp:SERVER_IP erverPort:SERVER_PORT serverRoute:GET_MYINFO_ROUTE];
+    NSURL *url = [NSURL URLWithString:serverInfo.URI];
+    
+    // 创建GET请求
+    NSURLSessionDataTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSError *jsonError = nil;
+        NSDictionary *userData = [[[NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError] objectForKey:@"data"] objectForKey:@"user_info"];
+        
+        [DJUser initUserInfo:userData];
+        
+        
+        
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+}
 
 
 
@@ -209,21 +334,21 @@ static DJUser* _instance = nil;
 // 初始化用户信息
 + (DJUser *)initUserInfo:(NSDictionary *)resultObject {
     
-    DJUser *userInfo = [DJUser shareInstance];
-    [userInfo setValue:[resultObject objectForKey:@"uid"] forKey:@"id"];
-    [userInfo setValue:[resultObject objectForKey:@"ttk_id"] forKey:@"username"];
-    [userInfo setValue:[resultObject objectForKey:@"nick_name"] forKey:@"nickname"];
-    [userInfo setValue:[resultObject objectForKey:@"gender"] forKey:@"gender"];
-    [userInfo setValue:[resultObject objectForKey:@"birthdate"] forKey:@"birthday"];
-    [userInfo setValue:[resultObject objectForKey:@"avatar_path"] forKey:@"avatar"];
+    [[DJTikTok shareInstance] setMyUserInfo:[[DJUser alloc] init]];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"id"] forKey:@"uid"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"ttk_id"] forKey:@"username"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"nick_name"] forKey:@"nickname"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"gender"] forKey:@"gender"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"birthdate"] forKey:@"birthday"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"avatar_path"] forKey:@"avatar"];
 //    [userInfo setValue:[resultObject objectForKey:@"bio"] forKey:@"uid"];
-    [userInfo setValue:[resultObject objectForKey:@"country"] forKey:@"region"];
-    [userInfo setValue:[resultObject objectForKey:@"city"] forKey:@"address"];
-    [userInfo setValue:[resultObject objectForKey:@"email"] forKey:@"email"];
-    [userInfo setValue:[resultObject objectForKey:@"phone"] forKey:@"phoneNumber"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"country"] forKey:@"region"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"city"] forKey:@"address"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"email"] forKey:@"email"];
+    [[DJTikTok shareInstance].myUserInfo setValue:[resultObject objectForKey:@"phone"] forKey:@"phoneNumber"];
     //[userInfo setValue:[resultObject objectForKey:@"account_status"] forKey:@"uid"];
 
-    return userInfo;
+    return [DJTikTok shareInstance].myUserInfo;
 }
 
 
@@ -307,7 +432,7 @@ static DJUser* _instance = nil;
 // 备用方法google登录获取 ttkUserInfo
 + (void)getGoogleStandbyTTKUserInfoWithViewController:(UIViewController *)viewController
                                     CompletionHandler:(DJCompletionHandler DJ_NULLABLE)handler {
-    // 得到HTTP请求信息
+    // 得到HTTP请求信息(包括Google Token)
     [DJUser getGoogleStandbyLoginRequsetInfoWithViewController:viewController CompletionHandler:^(id resultObject, NSError *error) {
         if (!error) {
             DJRequestInfo *requestInfo = (DJRequestInfo *)resultObject;
@@ -338,9 +463,9 @@ static DJUser* _instance = nil;
         if (!error) {
             
             // 获取第三方平台UserInfo
-            DJStandbyUserInfo *standbyInfo = [DJStandbyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
+            DJThirdPartyUserInfo *thirdPartyUserInfo = [DJThirdPartyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
             // 获取请求体信息
-            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:standbyInfo clientInfo:clientInfo];
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:thirdPartyUserInfo clientInfo:clientInfo];
             // 获取HTTP请求信息
             DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
             dispatch_async(dispatch_get_main_queue(),^{
@@ -395,9 +520,9 @@ static DJUser* _instance = nil;
         if (!error) {
             
             // 获取第三方平台UserInfo
-            DJStandbyUserInfo *standbyInfo = [DJStandbyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJGoogleStandbyLoginType];
+            DJThirdPartyUserInfo *thirdPartyUserInfo = [DJThirdPartyUserInfo initStandbyUserInfoWithToken:token loginPathWay:DJFacebookStandbyLoginType];
             // 获取请求体信息
-            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:standbyInfo clientInfo:clientInfo];
+            DJLoginParameters *parameters = [DJLoginParameters initLoginParametersWithPhone:nil email:nil verification_code:nil ttk_id:nil password:nil token:nil thirdPartyUserInfo:thirdPartyUserInfo clientInfo:clientInfo];
             // 获取HTTP请求信息
             DJRequestInfo *requestInfo = [DJRequestInfo initRequestInfoWithServerInfo:serverInfo parameters:parameters];
             dispatch_async(dispatch_get_main_queue(),^{
@@ -423,5 +548,9 @@ static DJUser* _instance = nil;
 
 
 
+
+//- (nonnull id)copyWithZone:(nullable NSZone *)zone {
+//
+//}
 
 @end

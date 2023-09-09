@@ -30,9 +30,11 @@ typedef void (^DJAsyncDataHandler)(NSData *data, NSString *objectId, NSError *er
 #define LOGIN_ROUTE_GOOGLE                        @"/v1/sso/GoogleLogin"
 #define LOGIN_ROUTE_FACEBOOK                      @"/v1/sso/FacebookLogin"
 #define LOGIN_ROUTE_GITHUB                        @"/v1/sso/FacebookLogin"
-#define LOGIN_ROUTE_STANDBY_GOOGLE                @"/v1/sso/StandbyLogin"
-#define LOGIN_ROUTE_STANDBY_Facebook              @"/v1/sso/StandbyLogin"
+#define LOGIN_ROUTE_STANDBY_GOOGLE                @"/v1/sso/StandbyGoogleLogin"
+#define LOGIN_ROUTE_STANDBY_Facebook              @"/v1/sso/StandbyFacebookLogin"
 #define LOGIN_ROUTE_STANDBY_GITHUB                @"/v1/sso/StandbyLogin"
+
+#define GET_MYINFO_ROUTE                          @"/v1/user/self"
 
 
 

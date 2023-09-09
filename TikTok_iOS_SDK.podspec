@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
 
 
   spec.name         = "TikTok_iOS_SDK"
-  spec.version      = "0.2.6"
+  spec.version      = "0.2.7"
   spec.summary      = "TikTok_iOS_SDK."
 
   # This description is used to generate tags and improve search results.

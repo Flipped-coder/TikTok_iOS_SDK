@@ -34,6 +34,9 @@ extern NSString *const DJServiceErrorNotification;                 // 错误提�
 ///
 @interface DJTikTok : NSObject
 
+@property (nonatomic, strong) NSString *userToken;
+@property (nonatomic, strong) DJUser *myUserInfo;
+
 #define DJTIKTOK_VERSION @"0.1.6"
 
 
@@ -79,6 +82,13 @@ extern NSString *const DJServiceErrorNotification;                 // 错误提�
  * @abstract 移除所有监听
  */
 + (void)removeAllDelegates;
+
+
+
+/**
+ * @abstract 获取项目唯一单例
+ */
++ (instancetype)shareInstance;
 
 
 /**

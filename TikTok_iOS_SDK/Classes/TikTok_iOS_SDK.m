@@ -113,5 +113,27 @@
 }
 
 
+static DJTikTok* _instance = nil;
++ (instancetype)shareInstance {
+    static dispatch_once_t onceToken ;
+    dispatch_once(&onceToken, ^{
+        _instance = [[super allocWithZone:NULL] init] ;
+    });
+    return _instance ;
+    }
+ 
+ //用alloc返回也是唯一实例
++ (DJTikTok *) allocWithZone:(struct _NSZone *)zone {
+    return [DJTikTok shareInstance] ;
+}
+//对对象使用copy也是返回唯一实例
+- (DJTikTok *)copyWithZone:(NSZone *)zone {
+    return [DJTikTok shareInstance] ;//return _instance;
+}
+ //对对象使用mutablecopy也是返回唯一实例
+- (DJTikTok *)mutableCopyWithZone:(NSZone *)zone {
+    return [DJTikTok shareInstance] ;
+}
+
 
 @end
