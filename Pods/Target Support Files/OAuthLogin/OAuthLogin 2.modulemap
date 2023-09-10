@@ -1,6 +1,0 @@
-framework module OAuthLogin {
-  umbrella header "OAuthLogin-umbrella.h"
-
-  export *
-  module * { export * }
-}
